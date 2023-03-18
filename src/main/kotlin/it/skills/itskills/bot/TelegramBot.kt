@@ -41,7 +41,7 @@ class TelegramBot : TelegramLongPollingBot() {
             val message = update.message
             val chatId = message.chatId.toString()
 
-            println("Question: ${message.text}")
+            println("Question: ${message.text} \n ${Date()}")
 //            val responseText = if (message.hasText()) {
 //                val messageText = message.text
 //                when (messageText) {
