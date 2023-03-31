@@ -7,5 +7,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface ChatGptRepository {
 
-    suspend fun sendMessage(data: ChatGptRequestModel): Flow<Resource<ChatGptResponseModel>>
+    fun sendMessage(data: ChatGptRequestModel): Flow<Resource<ChatGptResponseModel>>
 }

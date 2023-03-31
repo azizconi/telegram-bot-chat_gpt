@@ -9,7 +9,7 @@ import it.skills.itskills.bot.utils.safeApiCall
 import kotlinx.coroutines.flow.Flow
 
 class ChatGptRepositoryImpl(private val api: Api): ChatGptRepository {
-    override suspend fun sendMessage(data: ChatGptRequestModel): Flow<Resource<ChatGptResponseModel>> = safeApiCall {
+    override fun sendMessage(data: ChatGptRequestModel): Flow<Resource<ChatGptResponseModel>> = safeApiCall {
         api.sendMessage(data)
     }
 
