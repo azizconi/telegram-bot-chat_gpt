@@ -28,17 +28,19 @@ dependencies {
     implementation("org.telegram:telegrambots-spring-boot-starter:5.4.0.1")
 
 
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.2")
-    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.2")
+//    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.2")
+//    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.2")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactive")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
+//    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactive")
+//    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
 
 
     implementation("com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.2")
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
 
+//    implementation("com.aallam.openai:openai-client-bom")
+//    implementation("com.aallam.openai:openai-client:3.2.0")
 }
 
 tasks.withType<KotlinCompile> {
