@@ -8,6 +8,10 @@ import it.skills.itskills.bot.data.request.chat_gpt.Message
 import it.skills.itskills.bot.repository.ChatGptRepositoryImpl
 import it.skills.itskills.bot.utils.Constants
 import it.skills.itskills.bot.utils.Resource
+import it.skills.itskills.model.entity.MessageModel
+import it.skills.itskills.model.entity.UserEntity
+import it.skills.itskills.model.response.UserResponseModel
+import it.skills.itskills.service.UserService
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -22,11 +26,12 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import org.telegram.telegrambots.meta.api.objects.File
 import org.telegram.telegrambots.meta.api.objects.Update
 import org.telegram.telegrambots.meta.api.objects.Voice
-import java.util.*
 import kotlin.coroutines.coroutineContext
 
 @Service
-class TelegramBot : TelegramLongPollingBot() {
+class TelegramBot(
+    private val service: UserService
+) : TelegramLongPollingBot() {
     override fun getBotToken(): String {
         return Constants.TELEGRAM_BOT_TOKEN
     }
@@ -55,18 +60,6 @@ class TelegramBot : TelegramLongPollingBot() {
             } catch (e: Exception) {
                 e.printStackTrace()
             }
-//            val responseText = if (message.hasText()) {
-//                val messageText = message.text
-//                when (messageText) {
-//                    "/start" -> "Добро пожаловать!"
-//                    else -> "Вы написали: *$messageText*"
-//                }
-//            } else {
-//                "Я понимаю только текст"
-//            }
-//            if (message.text == "/start") {
-//                sendTextContent(chatId, "sdsdsdsdsds")
-//            }
 
             if (message.hasVoice()) {
                 val voice: Voice = update.message.voice
@@ -94,7 +87,6 @@ class TelegramBot : TelegramLongPollingBot() {
                     OkHttpClient().newCall(downloadRequest).execute().body?.let {
                         inputFile.outputStream().use { output ->
                             it.byteStream().use { input ->
-
                                 input.copyTo(output)
                             }
                         }
@@ -105,6 +97,8 @@ class TelegramBot : TelegramLongPollingBot() {
             }
 
             if (message.hasText()) {
+                val id: Long = message.from.id
+
                 when (message.text) {
                     "/start" -> {
                         sendTextContent(
@@ -112,19 +106,96 @@ class TelegramBot : TelegramLongPollingBot() {
                             "*Добро пожаловать* \n Поддержите нас донатами! \n Можно отправить донат по номеру карты --> 4444 8888 1035 1985"
                         )
                     }
+                    "/clear" -> {
+                        try {
+                            val user = service.getUserById(id)
+                            user?.let {
+                                service.deleteUser(it)
+                            }
+                            sendTextContent(chatId, "Напишите тему про, которую вы хотите поговорить:)")
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                        }
+                    }
                     else -> {
-                        println("Question: ${message.text} \n ${Date()}")
-                        val chatGptRequest = ChatGptRequestModel(
-                            Constants.CHAT_GPT_MODEL, listOf(Message("user", message.text)), 0.7
-                        )
+
+
+                        val chatGptRequest = try {
+                            val user = service.getUserById(id)
+
+
+                            val convertUser = UserResponseModel.toUserResponse(user!!)
+
+                            val messageForChat = mutableListOf<Message>()
+                            convertUser.theme.let {
+                                messageForChat.add(Message("system", it))
+                            }
+
+                            println()
+                            convertUser.messages.forEach {
+                                println("model: $it")
+                                messageForChat.add(Message("user", it.question))
+                                messageForChat.add(Message("assistant", it.ask))
+                            }
+
+                            messageForChat.add(Message("user", message.text))
+
+                            ChatGptRequestModel(
+                                Constants.CHAT_GPT_MODEL, messageForChat/*listOf(Message("user", message.text))*/, 0.7
+                            )
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                            println("error " + e.message)
+                            ChatGptRequestModel(
+                                Constants.CHAT_GPT_MODEL, listOf(Message("user", message.text)), 0.7
+                            )
+                        }
+
+//                        val chatGptRequest = ChatGptRequestModel(
+//                            Constants.CHAT_GPT_MODEL, listOf(Message("user", message.text)), 0.7
+//                        )
                         repository.sendMessage(chatGptRequest).onEach { result ->
                             println(TAG + result.message)
                             when (result) {
                                 is Resource.Success -> {
+
+
                                     result.data?.choices?.let {
                                         if (it.isNotEmpty()) {
+
+                                            try {
+
+                                                service.getUserById(id)?.let { user ->
+
+                                                    service.addMessage(
+                                                        MessageModel(
+                                                            question = message.text,
+                                                            ask = it[0].message.content,
+                                                            user = user
+                                                        )
+                                                    )
+                                                }
+
+
+                                            } catch (e: Exception) {
+                                                val username: String? = message.from?.userName
+
+                                                val user = UserEntity(
+                                                    id,
+                                                    username,
+                                                    message.text,
+                                                    emptyList()
+                                                )
+
+                                                service.addUser(user)
+                                                e.printStackTrace()
+                                            }
+
+
                                             sendTextContent(chatId, it[0].message.content)
                                         }
+
+
                                     }
                                     coroutineContext.cancel()
                                 }

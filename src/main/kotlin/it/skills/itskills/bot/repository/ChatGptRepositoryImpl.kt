@@ -12,5 +12,4 @@ class ChatGptRepositoryImpl(private val api: Api): ChatGptRepository {
     override fun sendMessage(data: ChatGptRequestModel): Flow<Resource<ChatGptResponseModel>> = safeApiCall {
         api.sendMessage(data)
     }
-
 }
