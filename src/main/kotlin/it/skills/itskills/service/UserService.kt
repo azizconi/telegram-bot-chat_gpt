@@ -7,6 +7,7 @@ import it.skills.itskills.repository.MessageRepository
 import it.skills.itskills.repository.UserRepository
 import lombok.RequiredArgsConstructor
 import lombok.extern.slf4j.Slf4j
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 
 @Service
@@ -18,7 +19,7 @@ class UserService(
 ) {
 
 
-    fun getUserById(id: Long): UserEntity? = repository.getReferenceById(id)
+    fun getUserById(id: Long): UserEntity? = repository.findByIdOrNull(id)
     fun getUserByUsername(username: String) = repository.findByUsername(username)
 
     fun addUser(user: UserEntity) = repository.save(user)

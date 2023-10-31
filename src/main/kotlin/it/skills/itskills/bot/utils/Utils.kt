@@ -12,6 +12,7 @@ fun <T> safeApiCall(call: suspend() -> Response<T>): Flow<Resource<T>> = flow {
     var remoteData: Response<T>? = null
     try {
         remoteData = call()
+        println("safeApiCall ${remoteData.code()}")
         val data = remoteData.body()
         println("safeApiCall $data")
         if (data != null) {

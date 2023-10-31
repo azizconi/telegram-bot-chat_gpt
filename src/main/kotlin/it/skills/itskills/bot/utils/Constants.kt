@@ -8,7 +8,7 @@ object Constants {
     const val TELEGRAM_BOT_TOKEN = "6034790014:AAE6HvGlejlMH4dl67BeW9imaR62dJuUkRg"
 
     const val CHAT_GPT_API = "https://api.openai.com/"
-    const val CHAT_GPT_API_TOKEN = "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"
+    const val CHAT_GPT_API_TOKEN = "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"
 
     const val HttpExceptionError = "Ой что-то пошло не так"
     const val  IOExceptionError = "Ошибка сервера, проверьте подключение к интернету"
