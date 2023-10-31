@@ -10,7 +10,7 @@ data class MessageModel(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long,
 
-    @Column(name = "question", length = 12000)
+    @Column(name = "question", length = 240000)
     val question: String,
     @Column(name = "ask", length = 240000)
     val ask: String,

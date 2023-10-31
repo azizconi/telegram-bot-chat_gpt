@@ -26,6 +26,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import org.telegram.telegrambots.meta.api.objects.File
 import org.telegram.telegrambots.meta.api.objects.Update
 import org.telegram.telegrambots.meta.api.objects.Voice
+import java.util.*
 import kotlin.coroutines.coroutineContext
 
 @Service
@@ -119,7 +120,7 @@ class TelegramBot(
                     }
                     else -> {
 
-
+                        println("Question: ${message.text} \n ${Date()}")
                         val chatGptRequest = try {
                             val user = service.getUserById(id)
 
@@ -133,7 +134,6 @@ class TelegramBot(
 
                             println()
                             convertUser.messages.forEach {
-                                println("model: $it")
                                 messageForChat.add(Message("user", it.question))
                                 messageForChat.add(Message("assistant", it.ask))
                             }

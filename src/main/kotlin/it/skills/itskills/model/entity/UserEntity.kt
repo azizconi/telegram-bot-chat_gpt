@@ -9,7 +9,7 @@ data class UserEntity (
     val id: Long,
     @Column(name = "username")
     val username: String?,
-    @Column(name = "theme")
+    @Column(name = "theme", length = 240000)
     val theme: String,
 
     @OneToMany(cascade = [CascadeType.ALL], mappedBy = "user", fetch = FetchType.EAGER)
