@@ -124,6 +124,8 @@ class TelegramBot(
                         val chatGptRequest = try {
                             val user = service.getUserById(id)
 
+                            if (user == null) service.addUser(UserEntity())
+
 
                             val convertUser = UserResponseModel.toUserResponse(user!!)
 
@@ -164,16 +166,28 @@ class TelegramBot(
                                         if (it.isNotEmpty()) {
 
                                             try {
+                                                val userEntity = service.getUserById(id)
 
-                                                service.getUserById(id)?.let { user ->
+                                                if (userEntity != null) {
 
                                                     service.addMessage(
                                                         MessageModel(
                                                             question = message.text,
                                                             ask = it[0].message.content,
-                                                            user = user
+                                                            user = userEntity
                                                         )
                                                     )
+                                                } else {
+                                                    val username: String? = message.from?.userName
+
+                                                    val user = UserEntity(
+                                                        id,
+                                                        username,
+                                                        message.text,
+                                                        emptyList()
+                                                    )
+
+                                                    service.addUser(user)
                                                 }
 
 
