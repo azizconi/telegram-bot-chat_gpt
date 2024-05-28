@@ -1,10 +1,10 @@
 HELP.md
 .gradle
 build/
-src/main/kotlin/it/skills/itskills/constants.kt
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
+src/main/kotlin/it/skills/itskills/constants.kt
 
 ### STS ###
 .apt_generated
