@@ -1,6 +1,9 @@
 package it.skills.itskills.bot
 
 
+import it.skills.itskills.CHAT_GPT_MODEL
+import it.skills.itskills.TELEGRAM_BOT_TOKEN
+import it.skills.itskills.TELEGRAM_BOT_USERNAME
 import it.skills.itskills.bot.data.remote.retrofit.RetrofitInstance
 import it.skills.itskills.bot.data.repository.ChatGptRepository
 import it.skills.itskills.bot.data.request.chat_gpt.ChatGptRequestModel
@@ -34,11 +37,11 @@ class TelegramBot(
     private val service: UserService
 ) : TelegramLongPollingBot() {
     override fun getBotToken(): String {
-        return Constants.TELEGRAM_BOT_TOKEN
+        return TELEGRAM_BOT_TOKEN
     }
 
     override fun getBotUsername(): String {
-        return Constants.TELEGRAM_BOT_USERNAME
+        return TELEGRAM_BOT_USERNAME
     }
 
     val repository: ChatGptRepository = ChatGptRepositoryImpl(RetrofitInstance.api())
@@ -143,13 +146,13 @@ class TelegramBot(
                             messageForChat.add(Message("user", message.text))
 
                             ChatGptRequestModel(
-                                Constants.CHAT_GPT_MODEL, messageForChat/*listOf(Message("user", message.text))*/, 0.7
+                                CHAT_GPT_MODEL, messageForChat/*listOf(Message("user", message.text))*/, 0.7
                             )
                         } catch (e: Exception) {
                             e.printStackTrace()
                             println("error " + e.message)
                             ChatGptRequestModel(
-                                Constants.CHAT_GPT_MODEL, listOf(Message("user", message.text)), 0.7
+                                CHAT_GPT_MODEL, listOf(Message("user", message.text)), 0.7
                             )
                         }
 

@@ -1,5 +1,7 @@
 package it.skills.itskills.bot.data.remote.retrofit
 
+import it.skills.itskills.CHAT_GPT_API
+import it.skills.itskills.CHAT_GPT_API_TOKEN
 import it.skills.itskills.bot.data.remote.Api
 import it.skills.itskills.bot.utils.Constants
 import okhttp3.OkHttpClient
@@ -14,7 +16,7 @@ object RetrofitInstance {
 
             val requestBuilderForToken = original.newBuilder().method(original.method, original.body)
 
-                .header("Authorization", "Bearer ${Constants.CHAT_GPT_API_TOKEN}")
+                .header("Authorization", "Bearer $CHAT_GPT_API_TOKEN")
                 .header("Content-Type", "application/json")
             val requestToken = requestBuilderForToken.build()
             chain.proceed(requestToken)
@@ -27,7 +29,7 @@ object RetrofitInstance {
 
 
     private fun retrofitInstance() =
-        Retrofit.Builder().baseUrl(Constants.CHAT_GPT_API).addConverterFactory(GsonConverterFactory.create())
+        Retrofit.Builder().baseUrl(CHAT_GPT_API).addConverterFactory(GsonConverterFactory.create())
             .client(client).build()
 
     fun api(): Api {
