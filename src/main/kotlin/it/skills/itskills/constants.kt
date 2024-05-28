@@ -1,8 +1,8 @@
 package it.skills.itskills
 
 const val CHAT_GPT_API = "https://api.openai.com/"
-const val CHAT_GPT_API_TOKEN = Your open-ai token
-const val CHAT_GPT_MODEL = chat gpt model
+const val CHAT_GPT_API_TOKEN = "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"
+const val CHAT_GPT_MODEL = "gpt-3.5-turbo"
 
-const val TELEGRAM_BOT_USERNAME = telegram bot name
-const val TELEGRAM_BOT_TOKEN = telegram bot token
+const val TELEGRAM_BOT_USERNAME = "ChatGptCodeHubBot"
+const val TELEGRAM_BOT_TOKEN = "6034790014:AAE6HvGlejlMH4dl67BeW9imaR62dJuUkRg"
