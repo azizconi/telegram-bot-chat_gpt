@@ -1,8 +1,10 @@
 package it.skills.itskills.bot.data.remote
 
 import it.skills.itskills.bot.data.request.chat_gpt.ChatGptRequestModel
+import it.skills.itskills.bot.data.request.text_to_speech.TextToSpeechRequestModel
 import it.skills.itskills.bot.data.response.chat_gpt.ChatGptResponseModel
 import it.skills.itskills.bot.utils.Constants
+import okhttp3.ResponseBody
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.Header
@@ -19,4 +21,9 @@ interface Api {
 //        @Header("Content-Type") contentType: String = "application/json"
     ): Response<ChatGptResponseModel>
 
+
+    @POST("v1/audio/speech")
+    suspend fun textToSpeech(
+        @Body data: TextToSpeechRequestModel
+    ): Response<ResponseBody>
 }
